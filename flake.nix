@@ -1,58 +1,71 @@
 {
-  description = "Homelab";
+  description = "My Homelab";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
-      in
-      with pkgs;
-      {
-        devShells.default = mkShell {
-          packages = [
+        pkgs = import nixpkgs {
+          inherit system;
+          config = {
+            allowUnfree = true;
+            allowUnsupportedSystem = true;
+          };
+        };
+        
+        # Platform-specific packages
+        platformSpecificPackages = if pkgs.stdenv.isDarwin then [
+          pkgs.coreutils
+          pkgs.gnused
+        ] else [
+          pkgs.iproute2
+          pkgs.iputils
+          pkgs.libisoburn
+          pkgs.neovim
+          pkgs.openssh
+          pkgs.p7zip
+          pkgs.qrencode
+          pkgs.shellcheck
+          pkgs.wireguard-tools
+          pkgs.yamllint
+        ];
+
+      in {
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            # Core tools that work on both platforms
             ansible
-            ansible-lint
-            bmake
-            diffutils
+            age
+            argocd
             docker
-            docker-compose
-            dyff
+            fluxcd
             git
+            gnumake
             go
-            gotestsum
-            iproute2
+            gopls
+            helm
             jq
             k9s
-            kanidm
-            kube3d
+            kind
             kubectl
             kubernetes-helm
             kustomize
-            libisoburn
-            neovim
-            openssh
             opentofu # Drop-in replacement for Terraform
-            p7zip
             pre-commit
-            qrencode
-            shellcheck
-            wireguard-tools
-            yamllint
+            sops
+            stern
+            terraform
+            yq-go
+          ] ++ platformSpecificPackages;
 
-            (python3.withPackages (p: with p; [
-              jinja2
-              kubernetes
-              mkdocs-material
-              netaddr
-              pexpect
-              rich
-            ]))
-          ];
+          shellHook = ''
+            echo "Homelab development environment"
+            echo "Running on: ${system}"
+          '';
         };
       }
     );
