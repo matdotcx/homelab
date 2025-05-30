@@ -241,6 +241,22 @@ They can't capture all the project's features, but they are sufficient to get a 
 
 - [Try it out locally](https://homelab.khuedoan.com/installation/sandbox) without any hardware (just 4 commands!)
 - [Deploy on real hardware](https://homelab.khuedoan.com/installation/production/prerequisites) for production workload
+- [macOS Development Setup](./docs/getting-started/macos-development.md) for local development on macOS
+
+### Development Environments
+
+This repository includes two development environments:
+
+**Main Repository (`flake.nix`)**
+- Full homelab development environment with all tools
+- Optimized for macOS compatibility with `allowUnsupportedSystem = true`
+- Includes essential Kubernetes and homelab management tools
+
+**Sandbox Environment (`homelab-sandbox/`)**
+- Lightweight, separate Git repository for testing and experimentation
+- Platform-specific package selection (macOS vs Linux)
+- Minimal set of tools for rapid prototyping
+- Independent versioning and development cycle
 
 ## Roadmap
 
