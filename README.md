@@ -1,14 +1,16 @@
-# Khue's Homelab
+# macOS Homelab
 
-**[Features](#features) • [Get Started](#get-started) • [Documentation](https://homelab.khuedoan.com)**
+**[Features](#features) • [Get Started](#get-started) • [macOS Development Setup](./docs/getting-started/macos-development.md)**
 
-[![tag](https://img.shields.io/github/v/tag/khuedoan/homelab?style=flat-square&logo=semver&logoColor=white)](https://github.com/khuedoan/homelab/tags)
-[![document](https://img.shields.io/website?label=document&logo=gitbook&logoColor=white&style=flat-square&url=https%3A%2F%2Fhomelab.khuedoan.com)](https://homelab.khuedoan.com)
 [![license](https://img.shields.io/github/license/khuedoan/homelab?style=flat-square&logo=gnu&logoColor=white)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![stars](https://img.shields.io/github/stars/khuedoan/homelab?logo=github&logoColor=white&color=gold&style=flat-square)](https://github.com/khuedoan/homelab)
 
-This project utilizes [Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code) and [GitOps](https://www.weave.works/technologies/gitops) to automate provisioning, operating, and updating self-hosted services in my homelab.
-It can be used as a highly customizable framework to build your own homelab.
+This project is a **macOS-focused fork** of [Khue's Homelab](https://github.com/khuedoan/homelab), adapted for local development and testing on macOS systems. It utilizes [Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code) and [GitOps](https://www.weave.works/technologies/gitops) principles with a development environment optimized for macOS.
+
+**Key Differences from Original:**
+- Native macOS development environment using Nix flakes
+- Local Kubernetes testing with Kind instead of bare metal provisioning
+- Platform-specific package selection for macOS compatibility
+- Simplified toolchain focused on essential homelab development tools
 
 > **What is a homelab?**
 >
@@ -16,29 +18,34 @@ It can be used as a highly customizable framework to build your own homelab.
 > For more information, please see the [r/homelab introduction](https://www.reddit.com/r/homelab/wiki/introduction) and the
 > [Home Operations Discord community](https://discord.gg/home-operations) (formerly known as [k8s-at-home](https://k8s-at-home.com)).
 
-If you encounter an issue, please create [a bug report](https://github.com/khuedoan/homelab/issues/new?template=bug_report.md)
-(avoid asking for support about issues specific to this project in other communication channels).
+If you encounter an issue specific to the macOS adaptations, please create an issue in this repository. 
+For general homelab questions, refer to the [original project](https://github.com/khuedoan/homelab) or the [Home Operations Discord community](https://discord.gg/home-operations).
 
 ## Overview
 
-Project status: **ALPHA**
+Project status: **EXPERIMENTAL**
 
-This project is still in the experimental stage, and I don't use anything critical on it.
-Expect breaking changes that may require a complete redeployment.
-A proper upgrade path is planned for the stable release.
-More information can be found in [the roadmap](#roadmap) below.
+This is a macOS development fork focused on local testing and experimentation. It's designed for:
+- Learning Kubernetes and GitOps concepts on macOS
+- Local development and testing of homelab applications
+- Prototyping before deploying to production hardware
 
-### Hardware
+**Not intended for production use** - for production deployments, use the [original project](https://github.com/khuedoan/homelab) on Linux hardware.
 
-![Hardware](https://user-images.githubusercontent.com/27996771/98970963-25137200-2543-11eb-8f2d-f9a2d45756ef.JPG)
+### Development Environment
 
-- 4 × NEC SFF `PC-MK26ECZDR` (Japanese version of the ThinkCentre M700):
-    - CPU: `Intel Core i5-6600T @ 2.70GHz`
-    - RAM: `16GB`
-    - SSD: `128GB`
-- TP-Link `TL-SG108` switch:
-    - Ports: `8`
-    - Speed: `1000Mbps`
+This fork runs entirely on macOS using local development tools:
+
+**Requirements:**
+- macOS (tested on recent versions)
+- [Nix package manager](https://nixos.org/download.html)
+- Docker Desktop (for containerized applications)
+- At least 8GB RAM recommended for local Kubernetes clusters
+
+**Local Infrastructure:**
+- Kind (Kubernetes in Docker) for local clusters
+- Docker containers for application testing
+- Nix development shells for reproducible environments
 
 ### Features
 
@@ -102,7 +109,7 @@ They can't capture all the project's features, but they are sufficient to get a 
 [alert-demo]: https://github.com/khuedoan/homelab/assets/27996771/c922f755-e911-4ca0-9d4a-6e552d387f18
 [ai-demo]: https://github.com/khuedoan/homelab/assets/27996771/d77ba511-00b7-47c3-9032-55679a099e70
 
-### Tech stack
+### macOS Development Stack
 
 <table>
     <tr>
@@ -111,131 +118,68 @@ They can't capture all the project's features, but they are sufficient to get a 
         <th>Description</th>
     </tr>
     <tr>
-        <td><img width="32" src="https://simpleicons.org/icons/ansible.svg"></td>
-        <td><a href="https://www.ansible.com">Ansible</a></td>
-        <td>Automate bare metal provisioning and configuration</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/30269780"></td>
-        <td><a href="https://argoproj.github.io/cd">ArgoCD</a></td>
-        <td>GitOps tool built to deploy applications to Kubernetes</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://github.com/jetstack/cert-manager/raw/master/logo/logo.png"></td>
-        <td><a href="https://cert-manager.io">cert-manager</a></td>
-        <td>Cloud native certificate management</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/21054566?s=200&v=4"></td>
-        <td><a href="https://cilium.io">Cilium</a></td>
-        <td>eBPF-based Networking, Observability and Security (CNI, LB, Network Policy, etc.)</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/314135?s=200&v=4"></td>
-        <td><a href="https://www.cloudflare.com">Cloudflare</a></td>
-        <td>DNS and Tunnel</td>
+        <td><img width="32" src="https://github.com/kubernetes-sigs/kind/raw/main/logo/logo.png"></td>
+        <td><a href="https://kind.sigs.k8s.io">Kind</a></td>
+        <td>Kubernetes in Docker - local clusters for testing</td>
     </tr>
     <tr>
         <td><img width="32" src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png"></td>
-        <td><a href="https://www.docker.com">Docker</a></td>
-        <td>Ephemeral PXE server</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://github.com/kubernetes-sigs/external-dns/raw/master/docs/img/external-dns.png"></td>
-        <td><a href="https://github.com/kubernetes-sigs/external-dns">ExternalDNS</a></td>
-        <td>Synchronizes exposed Kubernetes Services and Ingresses with DNS providers</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fedora_logo.svg/267px-Fedora_logo.svg.png"></td>
-        <td><a href="https://getfedora.org/en/server">Fedora Server</a></td>
-        <td>Base OS for Kubernetes nodes</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Gitea_Logo.svg"></td>
-        <td><a href="https://gitea.com">Gitea</a></td>
-        <td>Self-hosted Git service</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://grafana.com/static/img/menu/grafana2.svg"></td>
-        <td><a href="https://grafana.com">Grafana</a></td>
-        <td>Observability platform</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://helm.sh/img/helm.svg"></td>
-        <td><a href="https://helm.sh">Helm</a></td>
-        <td>The package manager for Kubernetes</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/49319725"></td>
-        <td><a href="https://k3s.io">K3s</a></td>
-        <td>Lightweight distribution of Kubernetes</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://kanidm.com/images/logo.svg"></td>
-        <td><a href="https://kanidm.com">Kanidm</a></td>
-        <td>Modern and simple identity management platform</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/13629408"></td>
-        <td><a href="https://kubernetes.io">Kubernetes</a></td>
-        <td>Container-orchestration system, the backbone of this project</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://github.com/grafana/loki/blob/main/docs/sources/logo.png?raw=true"></td>
-        <td><a href="https://grafana.com/oss/loki">Loki</a></td>
-        <td>Log aggregation system</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/1412239?s=200&v=4"></td>
-        <td><a href="https://www.nginx.com">NGINX</a></td>
-        <td>Kubernetes Ingress Controller</td>
+        <td><a href="https://www.docker.com">Docker Desktop</a></td>
+        <td>Containerization platform for macOS</td>
     </tr>
     <tr>
         <td><img width="32" src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nix-snowflake-colours.svg"></td>
         <td><a href="https://nixos.org">Nix</a></td>
-        <td>Convenient development shell</td>
+        <td>Reproducible development environments with flakes</td>
     </tr>
     <tr>
-        <td><img width="32" src="https://ntfy.sh/_next/static/media/logo.077f6a13.svg"></td>
-        <td><a href="https://ntfy.sh">ntfy</a></td>
-        <td>Notification service to send notifications to your phone or desktop</td>
+        <td><img width="32" src="https://helm.sh/img/helm.svg"></td>
+        <td><a href="https://helm.sh">Helm</a></td>
+        <td>Kubernetes package manager</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://avatars.githubusercontent.com/u/13629408"></td>
+        <td><a href="https://kubernetes.io">kubectl</a></td>
+        <td>Kubernetes command-line tool</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://github.com/derailed/k9s/blob/master/assets/k9s.png?raw=true"></td>
+        <td><a href="https://k9scli.io">K9s</a></td>
+        <td>Terminal-based Kubernetes UI</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://avatars.githubusercontent.com/u/30269780"></td>
+        <td><a href="https://argoproj.github.io/cd">ArgoCD</a></td>
+        <td>GitOps continuous deployment</td>
     </tr>
     <tr>
         <td><img width="32" src="https://avatars.githubusercontent.com/u/3380462"></td>
         <td><a href="https://prometheus.io">Prometheus</a></td>
-        <td>Systems monitoring and alerting toolkit</td>
+        <td>Monitoring and alerting (local testing)</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://grafana.com/static/img/menu/grafana2.svg"></td>
+        <td><a href="https://grafana.com">Grafana</a></td>
+        <td>Observability dashboards</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Gitea_Logo.svg"></td>
+        <td><a href="https://gitea.com">Gitea</a></td>
+        <td>Self-hosted Git service (containerized)</td>
+    </tr>
+    <tr>
+        <td><img width="32" src="https://github.com/FiloSottile/age/raw/main/logo/logo.svg"></td>
+        <td><a href="https://age-encryption.org">Age + SOPS</a></td>
+        <td>Modern encryption and secret management</td>
     </tr>
     <tr>
         <td><img width="32" src="https://docs.renovatebot.com/assets/images/logo.png"></td>
         <td><a href="https://www.whitesourcesoftware.com/free-developer-tools/renovate">Renovate</a></td>
-        <td>Automatically update dependencies</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://raw.githubusercontent.com/rook/artwork/master/logo/blue.svg"></td>
-        <td><a href="https://rook.io">Rook Ceph</a></td>
-        <td>Cloud-Native Storage for Kubernetes</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/48932923?s=200&v=4"></td>
-        <td><a href="https://tailscale.com">Tailscale</a></td>
-        <td>VPN without port forwarding</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/13991055?s=200&v=4"></td>
-        <td><a href="https://www.wireguard.com">Wireguard</a></td>
-        <td>Fast, modern, secure VPN tunnel</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://avatars.githubusercontent.com/u/84780935?s=200&v=4"></td>
-        <td><a href="https://woodpecker-ci.org">Woodpecker CI</a></td>
-        <td>Simple yet powerful CI/CD engine with great extensibility</td>
-    </tr>
-    <tr>
-        <td><img width="32" src="https://zotregistry.dev/v2.0.2/assets/images/logo.svg"></td>
-        <td><a href="https://zotregistry.dev">Zot Registry</a></td>
-        <td>Private container registry</td>
+        <td>Automated dependency updates</td>
     </tr>
 </table>
+
+**Note:** This fork focuses on **local development tools** that work well on macOS. For production infrastructure components (bare metal provisioning, hardware networking, etc.), refer to the [original project](https://github.com/khuedoan/homelab).
 
 ## Get Started
 
