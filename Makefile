@@ -1,15 +1,16 @@
-.POSIX:
-.PHONY: *
-.EXPORT_ALL_VARIABLES:
+.PHONY: help create-cluster delete-cluster
 
-KUBECONFIG = $(shell pwd)/metal/kubeconfig.yaml
-KUBE_CONFIG_PATH = $(KUBECONFIG)
+help: ## Show this help message
+	@echo 'Usage: make [target]'
+	@echo ''
+	@echo 'Targets:'
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-default: metal system external smoke-test post-install clean
+create-cluster: ## Create a local Kubernetes cluster
+	kind create cluster --config config/kind.yaml
 
-configure:
-	./scripts/configure
-	git status
+delete-cluster: ## Delete the local Kubernetes cluster
+	kind delete cluster --name homelab
 
 metal:
 	make -C metal
@@ -47,3 +48,8 @@ docs:
 
 git-hooks:
 	pre-commit install
+
+status: ## Check cluster status
+	kubectl cluster-info
+	kubectl get nodes
+	kubectl get pods -A
